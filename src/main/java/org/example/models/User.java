@@ -11,11 +11,11 @@ public class User {
     private String secondname;
     private String email;
     private String password;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "favouriteList_id")
     private FavouriteList favouriteList;
 
@@ -25,12 +25,20 @@ public class User {
         this.secondname = secondname;
         this.email = email;
         this.password = password;
-        this.cart = new Cart();
-        this.favouriteList = new FavouriteList();
     }
 
     public User () {
 
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (cart == null) {
+            cart = new Cart();
+        }
+        if (favouriteList == null) {
+            favouriteList = new FavouriteList();
+        }
     }
 
     public String getFirstname() {
