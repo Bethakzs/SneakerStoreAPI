@@ -2,13 +2,10 @@ package org.example.services;
 
 import org.example.models.Cart;
 import org.example.models.Sneakers;
-import org.example.models.User;
 import org.example.repo.CartRepository;
-import org.example.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,12 +32,15 @@ public class CartService {
         return null;
     }
 
-    public void removeFromCart(Long id, Sneakers sneakers) {
+    public boolean removeFromCart(Long id, Long sneakerId) {
         Optional<Cart> cartOptional = getCart(id);
-        if (cartOptional.isPresent()) {
-            Cart cart = cartOptional.get();
-            cart.getSneakers().removeIf(s -> s.getId() == sneakers.getId());
+        if (cartOptional.isEmpty()) {
+            return false;
         }
+        Cart cart = cartOptional.get();
+        cart.getSneakers().removeIf(sneaker -> sneaker.getId() == sneakerId);
+        cartRepository.save(cart);
+        return true;
     }
 
     public void removeAllFromCart(Long id) {

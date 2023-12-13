@@ -23,11 +23,16 @@ public class UserService {
     public User createUser(User user){
         return userRepository.save(user);
     }
-    public Optional<User> getUser(Long id){
-        return userRepository.findById(id);
+    public User getUser(String email){
+        return userRepository.findByEmail(email);
     }
-//    public Optional<User> removeUser(Long id){
-//        Optional<User> user = userRepository.findById(id);
-//        return userRepository.delete(user);
-//    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void removeUser(String email) {
+        User user = findByEmail(email);
+        userRepository.delete(user);
+    }
 }

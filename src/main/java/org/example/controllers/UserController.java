@@ -37,23 +37,38 @@ public class UserController {
         return ResponseEntity.ok(users.getContent());
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<Optional<User>> getUser(@PathVariable Long id) {
-        Optional<User> user = userService.getUser(id);
+    @GetMapping("/user/{email}")
+    public ResponseEntity<User> getUser(@PathVariable String email) {
+        User user = userService.getUser(email);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/user")
+    @PostMapping("/api/login")
+//    @PostMapping("/user/login")
+    public ResponseEntity<User> loginUser(@RequestBody User user) {
+        String email = user.getEmail();
+        String password = user.getPassword();
+        if (password.equals(userService.findByEmail(email).getPassword())) {
+            user = userService.findByEmail(email);
+            return ResponseEntity.ok(user);
+        }
+        else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    @PostMapping("/api/signup")
+//    @PostMapping("/user/signup")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }
 
-//    @DeleteMapping("/user/{id}")
-//    public ResponseEntity<Void> removeUser(@PathVariable Long id) {
-//        userService.removeUser(id);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/user/{email}")
+    public ResponseEntity<Void> removeUser(@PathVariable String email) {
+        userService.removeUser(email);
+        return ResponseEntity.ok().build();
+    }
 //Cart
     @GetMapping("/user/{id}/cart")
     public ResponseEntity<Optional<Cart>> getCartList(@PathVariable Long id) {
@@ -67,9 +82,12 @@ public class UserController {
         return ResponseEntity.ok(addedSneakers);
     }
 
-    @DeleteMapping("/user/{id}/cart")
-    public ResponseEntity<Void> removeFromCart(@PathVariable Long id, @RequestBody Sneakers sneakers) {
-        cartService.removeFromCart(id, sneakers);
+    @DeleteMapping("/user/{id}/cart/{sneakerId}")
+    public ResponseEntity<Void> removeFromCart(@PathVariable Long id, @PathVariable Long sneakerId) {
+        boolean isRemoved = cartService.removeFromCart(id, sneakerId);
+        if (!isRemoved) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -91,9 +109,12 @@ public class UserController {
         return ResponseEntity.ok(addedSneakers);
     }
 
-    @DeleteMapping("/user/{id}/favorites")
-    public ResponseEntity<Void> removeFromFavouriteList(@PathVariable Long id, @RequestBody Sneakers sneakers) {
-        favouriteListService.removeFromCart(id, sneakers);
+    @DeleteMapping("/user/{id}/favorites/{sneakerId}")
+    public ResponseEntity<Void> removeFromFavouriteList(@PathVariable Long id, @PathVariable Long sneakerId) {
+        boolean isRemoved = favouriteListService.removeFromFavouriteList(id, sneakerId);
+        if (!isRemoved) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().build();
     }
 

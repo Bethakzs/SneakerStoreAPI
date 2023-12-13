@@ -7,8 +7,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstname;
-    private String secondname;
+    private String username;
     private String email;
     private String password;
     @OneToOne(cascade = CascadeType.ALL)
@@ -19,10 +18,9 @@ public class User {
     @JoinColumn(name = "favouriteList_id")
     private FavouriteList favouriteList;
 
-    public User(Long id, String firstname, String secondname, String email, String password) {
+    public User(Long id, String username, String email, String password) {
         this.id = id;
-        this.firstname = firstname;
-        this.secondname = secondname;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -41,20 +39,12 @@ public class User {
         }
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getSecondname() {
-        return secondname;
-    }
-
-    public void setSecondname(String secondname) {
-        this.secondname = secondname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -87,5 +77,9 @@ public class User {
 
     public void setFavouriteList(FavouriteList favouriteList) {
         this.favouriteList = favouriteList;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

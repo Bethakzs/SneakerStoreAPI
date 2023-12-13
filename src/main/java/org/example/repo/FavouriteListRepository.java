@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FavouriteListRepository extends CrudRepository<FavouriteList, Long> {
-    Page<FavouriteList> findAll(Pageable pageable);
 }
 

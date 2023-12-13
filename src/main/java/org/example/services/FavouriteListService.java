@@ -33,12 +33,15 @@ public class FavouriteListService {
         return null;
     }
 
-    public void removeFromCart(Long id, Sneakers sneakers) {
+    public boolean removeFromFavouriteList(Long id, Long sneakerId) {
         Optional<FavouriteList> favouriteListOptional = getFavouriteList(id);
-        if (favouriteListOptional.isPresent()) {
-            FavouriteList favouriteList = favouriteListOptional.get();
-            favouriteList.getSneakers().removeIf(s -> s.getId() == sneakers.getId());
+        if (favouriteListOptional.isEmpty()) {
+            return false;
         }
+        FavouriteList favouriteList = favouriteListOptional.get();
+        favouriteList.getSneakers().removeIf(sneaker -> sneaker.getId() == sneakerId);
+        favouriteListRepository.save(favouriteList);
+        return true;
     }
 
     public void removeAllFromCart(Long id) {

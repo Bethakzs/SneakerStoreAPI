@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SneakerService {
     private final SneakerRepository sneakerRepository;
@@ -24,5 +26,9 @@ public class SneakerService {
 
     public Sneakers addToCart(Sneakers sneakers) {
         return sneakerRepository.save(sneakers);
+    }
+
+    public Optional<Sneakers> findById(Long id){
+        return sneakerRepository.findById(id);
     }
 }

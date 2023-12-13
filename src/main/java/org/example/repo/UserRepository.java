@@ -13,9 +13,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     Page<User> findAll(Pageable pageable);
-
-    List<User> findByCartId(Long id);
-
-//    Optional<User> delete(Optional<User> user);
+    User findByEmail(String email);
 }
 
